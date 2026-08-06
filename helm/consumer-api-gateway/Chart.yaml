@@ -1,0 +1,7 @@
+# Chart.yaml defines the metadata for this Helm package.
+apiVersion: v2 # Specifies Helm 3 chart API version
+name: consumer-api-gateway # The official name of your Helm chart
+description: Production Helm chart for Kotlin Spring Boot Consumer API Gateway # Human-readable summary
+type: application # Defines this chart as an executable application (vs a library chart)
+version: 0.1.0 # The version of this Helm chart package (incremented on chart changes)
+appVersion: "1.0.0" # The version of the underlying Spring Boot application image

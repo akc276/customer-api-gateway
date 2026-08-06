@@ -1,0 +1,42 @@
+# deployment.yml specifies how Kubernetes creates, updates, and auto-heals pod replicas
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-gateway # Dynamically sets deployment name based on Helm release
+  labels:
+    app: consumer-api-gateway # Label used for querying and grouping resources
+  spec:
+    replicas: {{ .Values.replicaCount }} # Injects replica count for values.yaml (default 2)
+    selector:
+      matchLabels:
+        app: consumer-api-gateway # Tells deployment controller which pods belong to it
+    template:
+      metadata:
+        labels:
+          app: consumer-api-gateway # Labels applied to each individual pod
+      spec:
+        containers:
+          - name: gateway
+            # Combines repository and tag from Values.yml (e.g. consumer-api-gateway:local)
+            image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+            imagePullPolicy: {{ .Values.image.pullPolicy }}
+            ports:
+              - containerPort: {{ .Values.service.port }} # Exposes port 8080 inside container'
+            env:
+              # Maps Spring boot connection strings from values.yml into container environment variables
+              - name: MONGODB_URI
+                value: {{ .Values.env.MONGODB_URI | quote }}
+              - name: REDIS_HOST
+                value: {{ .Values.env.REDIS_HOST | quote }}
+              - name: REDIS_PORT
+                value: {{ .Values.env.REDIS_PORT | quote }}
+              - name: KAFKA_BOOTSTRAP_SERVERS
+                value: {{ .Values.env.KAFKA_BOOTSTRAP_SERVERS | quote }}
+
+            # Liveness Probe: Kubernetes restarts the pod if this endpoint fails repeatedly
+            livenessProbe:
+              httpGet:
+                path: /actuator/health/liveness # Spring boot Actuator liveness probe path
+                port: 8080
+              initialDelaySeconds: 20 # Wait 20s for Spring boot JVM startup before first check
+              periodSeconds: 10 # Checks health every 10 seconds

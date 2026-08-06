@@ -1,0 +1,25 @@
+{
+  "UserConfig": {
+    "NamespaceConfig": [
+      {
+        "Type": "EventHub",
+        "Name": "emulatorns1",
+        "Comment": "Local event hubs namespace",
+        "Entities": [
+          {
+            "Name": "gateway-events",
+            "PartitionCount": 2,
+            "ConsumerGroups": [
+              {
+                "Name": "gateway-cg"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "LoggingConfig": {
+      "Type": "File"
+    }
+  }
+}

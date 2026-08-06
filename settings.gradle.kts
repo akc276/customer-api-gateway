@@ -1,0 +1,1 @@
+rootProject.name = "consumer-api-gateway" // Defines the Gradle project and default artifact name.

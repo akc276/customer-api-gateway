@@ -1,0 +1,27 @@
+# values.yaml provides default configuration parameters for the helm template files.
+# DevOps engineers override these values per environment (dev.yml, staging.yml, prod.yml
+
+# Number of identical gateway pod replicas to run for high availability
+replicaCount: 2
+
+image:
+  # Docker image repository (Option 1 local tag default)
+  repository: consumer-api-gateway
+  # Pull policy: IfNotPresent reuses local Docker image if already built
+  pullPolicy: IfNotPresent
+  # Image tag matching our local build
+  tag: "local"
+
+service:
+  # ClusterIP exposes the service on a cluster-internal IP address only
+  type: ClusterIP
+  # Internal HTTP port exposed by the service
+  port: 8080
+
+# Environment variables injected directly into the Spring Boot container
+env:
+  MONGODB_URI: "mongodb://gateway-mongodb:27017/gateway" # Internal Mongo DNS
+  REDIS_HOST: "gateway-redis" # Internal redis DNS
+  REDIS_PORT: "6379"
+  KAFKA_BOOTSTRAP_SERVERS: "gateway-eventhubs:9092" # Internal Event Hubs DNS
+

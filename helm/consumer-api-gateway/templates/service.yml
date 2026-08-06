@@ -1,0 +1,15 @@
+# service.yml configures internal network load balancing to route traffic to active pods
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-gateway # Dynamically names service resource
+spec:
+  type: {{ .Values.service.type }} # ClusterIP: Accessible only within kubernetes cluster
+  ports:
+    - port: {{ .Values.service.port }} # ClusterIP: Accessible only within Kubernetes cluster
+      targetPort: {{ .Values.service.port }} # Target container port inside pod (8080)
+      protocol: TCP
+      name: http
+  selector:
+    app: consumer-api-gateway # Routes incoming HTTP requests to pods with label app=consumer-api-gateway
+
