@@ -43,3 +43,11 @@ out/
 ### Kubernetes ###
 k3d-kubeconfig.yaml
 *.kubeconfig
+
+### Agents ###
+AGENTS.md
+.agents
+
+
+### System Files ###
+.DS_Store
