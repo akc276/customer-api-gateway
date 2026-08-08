@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/your-org/consumer-api-gateway.git' # Path to your Git repo
+    repoURL: 'https://github.com/akc276/customer-api-gateway.git' # Path to your Git repo
     targetRevision: HEAD
     path: helm/consumer-api-gateway # Relative path to Helm chart
     helm:
