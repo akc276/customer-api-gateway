@@ -82,6 +82,8 @@ services:
       - KUBECONFIG=/app/kubeconfig.yaml
     volumes:
       - ./k3d-kubeconfig.yaml:/app/kubeconfig.yaml
+    extra_hosts:
+      - "argocd-repo-server.argocd.svc.cluster.local:host.docker.internal" # routes repo server queries to k3d
 
 volumes:
   mongodb_data:
