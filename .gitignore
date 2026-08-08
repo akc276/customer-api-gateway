@@ -39,3 +39,7 @@ out/
 
 ### Kotlin ###
 .kotlin
+
+### Kubernetes ###
+k3d-kubeconfig.yaml
+*.kubeconfig
