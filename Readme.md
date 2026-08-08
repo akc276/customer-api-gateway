@@ -25,10 +25,19 @@ k3d image import consumer-api-gateway:local -c gateway-cluster
 ```zsh
 kubectl apply -f argocd/application.yaml
 ```
+
 ### Step 7: Access ArgoCD Web UI (Runs in background at http://localhost:9091)
+
+#### 1. Launch UI port forward
+
 ```zsh
-kubectl port-forward svc/argocd-server -n argocd 9091:80 &
+ kubectl port-forward svc/argocd-server -n argocd 9091:80 &
+ ```
+#### 2. Retrieve initial admin password for username: admin
+```zsh
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d && echo
 ```
+
 ### Step 8: Access Gateway Kubernetes Service (Runs in background at http://localhost:8085)
 ```zsh
 kubectl port-forward svc/consumer-api-gateway 8085:8080 &
