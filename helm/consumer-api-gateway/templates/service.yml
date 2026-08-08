@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Release.Name }}-gateway # Dynamically names service resource
+  name: {{ .Release.Name }} # Dynamically names service resource
 spec:
   type: {{ .Values.service.type }} # ClusterIP: Accessible only within kubernetes cluster
   ports:

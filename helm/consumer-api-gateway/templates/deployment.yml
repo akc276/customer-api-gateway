@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-gateway # Dynamically sets deployment name based on Helm release
+  name: {{ .Release.Name }} # Dynamically sets deployment name based on Helm release
   labels:
     app: consumer-api-gateway # Label used for querying and grouping resources
 spec:
