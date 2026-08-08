@@ -13,10 +13,9 @@ image:
   tag: "local"
 
 service:
-  # ClusterIP exposes the service on a cluster-internal IP address only
-  type: ClusterIP
-  # Internal HTTP port exposed by the service
+  type: NodePort # Exposes a permanent port directly on kubernetes node
   port: 8080
+  nodePort: 30080 # Permanent port accessible at http://localhost:30090
 
 # Environment variables injected directly into the Spring Boot container
 env:

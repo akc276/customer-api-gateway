@@ -8,6 +8,9 @@ spec:
   ports:
     - port: {{ .Values.service.port }} # ClusterIP: Accessible only within Kubernetes cluster
       targetPort: {{ .Values.service.port }} # Target container port inside pod (8080)
+      {{- if eq .Values.service.type "NodePort" }}
+      nodePort: {{ .Values.service.nodePort }}
+      {{- end}}
       protocol: TCP
       name: http
   selector:
