@@ -32,8 +32,6 @@ management:
         enabled: true
 
 logging:
-  pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [${spring.application.name}] [%thread] [traceId=%X{correlationId}] %-5level %logger{36} - %msg%n"
   level:
     root: INFO
     com.example.gateway: DEBUG

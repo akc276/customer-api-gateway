@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Assertions.assertEquals // Assert equality helper.
 import org.junit.jupiter.api.Test // JUnit 5 Test annotation.
 import org.mockito.Mockito.mock // Mockito mock creation.
 import org.mockito.kotlin.any // Mockito Kotlin null-safe any matcher.
+import org.mockito.kotlin.anyOrNull // Mockito Kotlin null-safe anyOrNull matcher.
 import org.mockito.kotlin.eq // Mockito Kotlin null-safe eq matcher.
 import org.mockito.kotlin.verify // Mockito Kotlin verify function.
 import org.slf4j.MDC // SLF4J MDC context.
@@ -26,8 +27,8 @@ class HelloControllerTest {
             assertEquals("gateway-requests", response["topic"]) // Verifies target topic name.
             assertEquals(testCorrelationId, response["traceId"]) // Verifies matching trace ID returned.
 
-            // Verifies eventPublisherService.publishEvent was called with expected topic, payload, and trace ID.
-            verify(eventPublisherService).publishEvent(eq("gateway-requests"), any(), eq(testCorrelationId))
+            // Verifies eventPublisherService.publishEvent was called with expected topic, payload, trace ID, and optional key.
+            verify(eventPublisherService).publishEvent(eq("gateway-requests"), any(), eq(testCorrelationId), anyOrNull())
         } finally {
             MDC.remove("correlationId") // Clears MDC context after test.
         }
