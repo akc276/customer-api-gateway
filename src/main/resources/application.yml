@@ -26,3 +26,7 @@ management:
       show-details: always
       probes:
         enabled: true
+
+logging:
+  level:
+    root: DEBUG

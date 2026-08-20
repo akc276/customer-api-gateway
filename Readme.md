@@ -42,3 +42,22 @@ kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.pas
 ```zsh
 kubectl port-forward svc/consumer-api-gateway 8085:8080 &
 ```
+
+## Here are the exact commands to use after updating code:
+
+Option 1: Update via Docker Compose (Recommended for Fast Testing)
+Run in your terminal:
+
+```zsh
+docker compose up --build --force-recreate gateway -d
+```
+Option 2: Update via Kubernetes & ArgoCD
+If testing inside your local Kubernetes cluster:
+```zsh
+# Step 1: Rebuild local Docker image
+docker build -t consumer-api-gateway:local .
+# Step 2: Import new image into k3d cluster
+k3d image import consumer-api-gateway:local -c gateway-cluster
+# Step 3: Rolling restart Kubernetes pods
+kubectl rollout restart deployment consumer-api-gateway
+```

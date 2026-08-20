@@ -35,6 +35,13 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+	// logging
+	implementation("org.springframework.boot:spring-boot-micrometer-tracing")
+	implementation("org.springframework.boot:spring-boot-micrometer-tracing-brave")
+
+	implementation("io.micrometer:micrometer-tracing")
+	implementation("io.micrometer:micrometer-tracing-bridge-brave")
 }
 
 kotlin {
