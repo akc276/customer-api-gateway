@@ -71,6 +71,19 @@ services:
       - redis # Starts redis before gateway
       - eventhubs-emulator # Ensures event broker is up before gateway starts
 
+  processor-service:
+    build:
+      context: ../processor-service # Uses processor-service folder as build context
+      dockerfile: Dockerfile
+    image: processor-service:local
+    container_name: processor-service-api
+    ports:
+      - "8083:8081" # Exposes processor-service on host port 8083 (avoiding Artifactory on 8081)
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: eventhubs-emulator:9092
+    depends_on:
+      - eventhubs-emulator
+
   # 7. ArgoCD Built-in Web UI Dashboard
 #  argocd:
 #    image: quay.io/argoproj/argocd:v2.10.2

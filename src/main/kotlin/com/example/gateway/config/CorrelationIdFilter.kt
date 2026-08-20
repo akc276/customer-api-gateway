@@ -26,8 +26,9 @@ class CorrelationIdFilter : Filter {
         val correlationId = httpRequest.getHeader(CORRELATION_ID_HEADER) ?: UUID.randomUUID().toString()
 
         try {
-            // Injects correlationId into SLF4J Mapped Diagnostic Context (MDC) for log output
+            // Injects correlationId and traceId into SLF4J Mapped Diagnostic Context (MDC) for log output
             MDC.put(CORRELATION_ID_LOG_VAR, correlationId)
+            MDC.put("traceId", correlationId)
 
             // Echoes correlationId back in HTTP response header for client tracing
             httpResponse.setHeader(CORRELATION_ID_HEADER, correlationId)
@@ -35,6 +36,7 @@ class CorrelationIdFilter : Filter {
             chain.doFilter(request, response)
         } finally {
             MDC.remove(CORRELATION_ID_LOG_VAR) // Clears MDC after request finishes to prevent thread pollution
+            MDC.remove("traceId")
         }
     }
 }

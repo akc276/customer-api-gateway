@@ -1,0 +1,16 @@
+# values.yaml provides default parameters for processor-service Helm templates.
+
+replicaCount: 2 # Replica count for processor service pods
+
+image:
+  repository: processor-service # Docker image repository name
+  pullPolicy: IfNotPresent # Pull policy reusing local image in k3d
+  tag: "local" # Image tag
+
+service:
+  type: NodePort # Exposes service port via NodePort
+  port: 8081 # Service port
+  nodePort: 30081 # NodePort accessible on host node
+
+env:
+  KAFKA_BOOTSTRAP_SERVERS: "gateway-eventhubs:9092" # Internal Event Hubs emulator DNS name

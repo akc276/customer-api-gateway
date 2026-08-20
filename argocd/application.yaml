@@ -1,14 +1,36 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: consumer-api-gateway # Name displayed in ArgoCD web UI
+  name: consumer-api-gateway # Name displayed in ArgoCD web UI for Gateway service
   namespace: argocd # Must be applied in argocd namespace
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/akc276/customer-api-gateway.git' # Path to your Git repo
+    repoURL: 'https://github.com/akc276/customer-api-gateway.git' # Path to Git repo
     targetRevision: main
-    path: helm/consumer-api-gateway # Relative path to Helm chart
+    path: helm/consumer-api-gateway # Relative path to Gateway Helm chart
+    helm:
+      valueFiles:
+        - values.yaml
+  destination:
+    server: 'https://kubernetes.default.svc' # Target local Kubernetes cluster API
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: processor-service # Name displayed in ArgoCD web UI for Processor service
+  namespace: argocd # Must be applied in argocd namespace
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/akc276/processor-service.git' # Path to Processor Service Git repo
+    targetRevision: main
+    path: helm/processor-service # Relative path to Processor Service Helm chart
     helm:
       valueFiles:
         - values.yaml

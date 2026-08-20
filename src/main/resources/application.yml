@@ -14,7 +14,11 @@ spring:
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer # Serializes message keys as UTF-8 strings
       value-serializer: org.apache.kafka.common.serialization.StringSerializer # Serializes message values as UTF-8 strings
-
+    consumer:
+      group-id: gateway-cg
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 
 management:
   endpoints:
@@ -28,5 +32,8 @@ management:
         enabled: true
 
 logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [${spring.application.name}] [%thread] [traceId=%X{correlationId}] %-5level %logger{36} - %msg%n"
   level:
-    root: DEBUG
+    root: INFO
+    com.example.gateway: DEBUG

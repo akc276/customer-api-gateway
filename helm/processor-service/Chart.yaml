@@ -1,0 +1,7 @@
+# Chart.yaml defines the metadata for the processor-service Helm package.
+apiVersion: v2 # Specifies Helm 3 chart API version
+name: processor-service # Official chart name
+description: Production Helm chart for Kotlin Spring Boot Processor Microservice # Human-readable summary
+type: application # Defines chart as an executable application
+version: 0.1.0 # Helm chart package version
+appVersion: "1.0.0" # Spring Boot application version

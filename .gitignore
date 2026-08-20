@@ -51,3 +51,5 @@ AGENTS.md
 
 ### System Files ###
 .DS_Store
+
+*.log

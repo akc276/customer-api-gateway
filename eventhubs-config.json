@@ -7,7 +7,16 @@
         "Comment": "Local event hubs namespace",
         "Entities": [
           {
-            "Name": "gateway-events",
+            "Name": "gateway-requests",
+            "PartitionCount": 2,
+            "ConsumerGroups": [
+              {
+                "Name": "processor-cg"
+              }
+            ]
+          },
+          {
+            "Name": "service-responses",
             "PartitionCount": 2,
             "ConsumerGroups": [
               {

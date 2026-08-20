@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: processor-service # ArgoCD Application name displayed in UI
+  namespace: argocd # Applied in argocd namespace
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/akc276/customer-api-gateway.git' # Repository URL
+    targetRevision: main
+    path: helm/processor-service # Path to processor-service Helm chart
+    helm:
+      valueFiles:
+        - values.yaml
+  destination:
+    server: 'https://kubernetes.default.svc' # Target Kubernetes cluster API server
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

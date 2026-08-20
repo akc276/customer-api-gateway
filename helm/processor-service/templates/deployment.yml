@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: processor-service # Deployment metadata name
+  labels:
+    app: processor-service
+spec:
+  replicas: {{ .Values.replicaCount }} # Configured replica count
+  selector:
+    matchLabels:
+      app: processor-service
+  template:
+    metadata:
+      labels:
+        app: processor-service
+    spec:
+      containers:
+        - name: processor-service
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}" # Container image reference
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 8081
+          env:
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              value: "{{ .Values.env.KAFKA_BOOTSTRAP_SERVERS }}"
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
