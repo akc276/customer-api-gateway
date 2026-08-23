@@ -6,9 +6,12 @@ import org.slf4j.MDC // MDC import for retrieving active trace ID.
 import org.springframework.web.bind.annotation.GetMapping // Annotation mapping HTTP GET requests.
 import org.springframework.web.bind.annotation.RestController // Marks class as a Spring REST controller component.
 
+import io.micrometer.tracing.Tracer // Micrometer Tracer interface for reading active trace context.
+
 @RestController // Exposes controller endpoints returning JSON responses.
 class HelloController( // Controller class handling diagnostic and hello world endpoints.
-    private val eventPublisherService: EventPublisherService // Injects EventPublisherService bean.
+    private val eventPublisherService: EventPublisherService, // Injects EventPublisherService bean.
+    private val tracer: Tracer // Injects Micrometer Tracer bean.
 ) {
 
     companion object { // Holds static companion members shared across class instances.
@@ -17,11 +20,11 @@ class HelloController( // Controller class handling diagnostic and hello world e
 
     @GetMapping("/hello") // Maps HTTP GET /hello endpoint requests.
     fun hello(): Map<String, String> { // Handler function returning key-value JSON response.
-        val traceId = MDC.get("correlationId") ?: MDC.get("traceId") ?: "N/A" // Retrieves active trace ID from MDC context.
+        val traceId = tracer.currentSpan()?.context()?.traceId() ?: "N/A" // Retrieves active W3C trace ID from Micrometer context.
         LOGGER.info("Saying hello world and publishing EventHub message with traceId: {}", traceId) // Logs info message with traceId.
         
         val payload = "Hello World request payload generated at ${System.currentTimeMillis()}" // Builds sample event payload message string.
-        eventPublisherService.publishEvent("gateway-requests", payload, traceId) // Publishes EventHub Kafka message to `gateway-requests` topic.
+        eventPublisherService.publishEvent("gateway-requests", payload) // Publishes EventHub Kafka message to `gateway-requests` topic with automatic trace propagation.
         
         return mapOf( // Returns JSON response details to HTTP client.
             "message" to "Hello World trigger processed and EventHub Kafka message sent!", // Informational response message.
