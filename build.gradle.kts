@@ -25,6 +25,8 @@ dependencies {
 
 	implementation("org.springframework.kafka:spring-kafka") // Spring Boot starter for Kafka/EventHubs producer-consumer operations
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
+	implementation("org.springframework:spring-aop") // Spring AOP support
+	implementation("org.aspectj:aspectjweaver") // AspectJ weaver for @Observed aspect proxy
 	implementation("org.springframework.boot:spring-boot-starter-webmvc")
 	implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 	implementation("org.springframework.boot:spring-boot-starter-data-redis")

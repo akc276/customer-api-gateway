@@ -7,12 +7,10 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.verify
 
-import io.micrometer.observation.ObservationRegistry
-
 class ScheduledPublisherServiceTest {
 
     private val eventPublisherService: EventPublisherService = mock(EventPublisherService::class.java)
-    private val scheduledPublisherService = ScheduledPublisherService(eventPublisherService, ObservationRegistry.NOOP)
+    private val scheduledPublisherService = ScheduledPublisherService(eventPublisherService)
 
     @Test
     fun `publishPeriodicHeartbeat publishes heartbeat event with key heartbeat`() {
