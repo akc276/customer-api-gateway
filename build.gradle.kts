@@ -23,29 +23,28 @@ repositories {
 dependencies {
 	developmentOnly("org.springframework.boot:spring-boot-devtools") // Available locally, excluded from production packaging.
 
-	implementation("org.springframework.kafka:spring-kafka") // Spring Boot starter for Kafka/EventHubs producer-consumer operations
-	implementation("org.springframework.boot:spring-boot-starter-actuator")
-	implementation("org.springframework:spring-aop") // Spring AOP support
-	implementation("org.aspectj:aspectjweaver") // AspectJ weaver for @Observed aspect proxy
+	// Core Web, Actuator, & Kafka Starters
 	implementation("org.springframework.boot:spring-boot-starter-webmvc")
+	implementation("org.springframework.boot:spring-boot-starter-actuator")
+	implementation("org.springframework.kafka:spring-kafka") // Spring Boot starter for Kafka/EventHubs operations
 	implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 	implementation("org.springframework.boot:spring-boot-starter-data-redis")
+
+	// Kotlin & Jackson Reflection
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("tools.jackson.module:jackson-module-kotlin")
 
+	// Distributed Tracing & Spring AOP (@Observed support)
+	implementation("org.springframework.boot:spring-boot-micrometer-tracing") // Enables Spring Boot Tracer auto-configuration
+	implementation("org.springframework.boot:spring-boot-micrometer-tracing-brave") // Enables Spring Boot Brave auto-configuration
+	implementation("io.micrometer:micrometer-tracing-bridge-brave") // Brave bridge for W3C trace context & Kafka headers
+	implementation("org.springframework:spring-aop") // Spring AOP support for @Observed aspect
+	implementation("org.aspectj:aspectjweaver") // AspectJ weaver for @Observed aspect proxy
+
+	// Testing
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.mockito.kotlin:mockito-kotlin:5.4.0")
-	testImplementation("org.springframework.boot:spring-boot-starter-actuator-test")
-	testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-
-	// logging
-	implementation("org.springframework.boot:spring-boot-micrometer-tracing")
-	implementation("org.springframework.boot:spring-boot-micrometer-tracing-brave")
-
-	implementation("io.micrometer:micrometer-tracing")
-	implementation("io.micrometer:micrometer-tracing-bridge-brave")
 }
 
 kotlin {

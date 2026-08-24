@@ -25,6 +25,9 @@ spring:
       observation-enabled: true
 
 management:
+  tracing:
+    sampling:
+      probability: 1.0 # Ensures 100% of HTTP requests create a W3C trace span
   endpoints:
     web:
       exposure:
