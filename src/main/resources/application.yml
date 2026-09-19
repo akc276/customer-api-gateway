@@ -14,11 +14,15 @@ spring:
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer # Serializes message keys as UTF-8 strings
       value-serializer: org.apache.kafka.common.serialization.StringSerializer # Serializes message values as UTF-8 strings
+      properties:
+        interceptor.classes: brave.kafka.interceptor.TracingProducerInterceptor # Automatically injects traceId into outgoing record headers
     consumer:
       group-id: gateway-cg
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      properties:
+        interceptor.classes: brave.kafka.interceptor.TracingConsumerInterceptor # Automatically extracts traceId from incoming record headers
     template:
       observation-enabled: true
     listener:

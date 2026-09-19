@@ -40,7 +40,9 @@ class KafkaConfig {
             ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG to StringSerializer::class.java.name,
             CommonClientConfigs.SECURITY_PROTOCOL_CONFIG to "SASL_PLAINTEXT", // Required protocol for event hubs kafka endpoint
             SaslConfigs.SASL_MECHANISM to "PLAIN", // Required SASL mechanism
-            SaslConfigs.SASL_JAAS_CONFIG to getJaasConfig() // Injects Event Hubs SASL authentication credentials
+            SaslConfigs.SASL_JAAS_CONFIG to getJaasConfig(), // Injects Event Hubs SASL authentication credentials
+            "enable.metrics.push" to false, // Disables KIP-714 telemetry admin RPCs incompatible with Event Hubs
+            ProducerConfig.INTERCEPTOR_CLASSES_CONFIG to listOf("brave.kafka.interceptor.TracingProducerInterceptor") // Injects W3C trace headers on send()
         )
         return DefaultKafkaProducerFactory(configProps)
     }
@@ -49,7 +51,7 @@ class KafkaConfig {
     @Bean
     fun kafkaTemplate(): KafkaTemplate<String, String> {
         val template = KafkaTemplate(producerFactory())
-        template.setObservationEnabled(true) // Enables Micrometer Observation for Kafka producers
+        template.setObservationEnabled(false) // Bypasses Micrometer Observation framework in favor of Brave Interceptors
         return template
     }
 
@@ -64,7 +66,9 @@ class KafkaConfig {
             ConsumerConfig.AUTO_OFFSET_RESET_CONFIG to "earliest",
             CommonClientConfigs.SECURITY_PROTOCOL_CONFIG to "SASL_PLAINTEXT",
             SaslConfigs.SASL_MECHANISM to "PLAIN",
-            SaslConfigs.SASL_JAAS_CONFIG to getJaasConfig()
+            SaslConfigs.SASL_JAAS_CONFIG to getJaasConfig(),
+            "enable.metrics.push" to false, // Disables KIP-714 telemetry admin RPCs incompatible with Event Hubs
+            ConsumerConfig.INTERCEPTOR_CLASSES_CONFIG to listOf("brave.kafka.interceptor.TracingConsumerInterceptor") // Extracts trace context from headers on poll()
         )
         return DefaultKafkaConsumerFactory(configProps)
     }
@@ -74,7 +78,7 @@ class KafkaConfig {
     fun kafkaListenerContainerFactory(): ConcurrentKafkaListenerContainerFactory<String, String> {
         val factory = ConcurrentKafkaListenerContainerFactory<String, String>()
         factory.setConsumerFactory(consumerFactory())
-        factory.containerProperties.isObservationEnabled = true // Enables Micrometer Observation for Kafka consumers
+        factory.containerProperties.isObservationEnabled = false // Bypasses Micrometer Observation framework in favor of Brave Interceptors
         return factory
     }
 }
